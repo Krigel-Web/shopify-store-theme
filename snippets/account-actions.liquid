@@ -179,6 +179,15 @@
     --buttons-radius: var(--style-border-radius-buttons-primary);
   }
 
+  /* Override Shop Pay button to match dark theme */
+  .account-actions__shop-login shop-login-button,
+  .account-actions__shop-login > * {
+    --shop-pay-button-background: #ffffff !important;
+    --shop-pay-button-text-color: #000000 !important;
+    --color-primary-button-background: #ffffff;
+    --color-primary-button-text: #000000;
+  }
+
   .account-actions__nav {
     padding: var(--padding-xl);
     padding-block-start: 0;
