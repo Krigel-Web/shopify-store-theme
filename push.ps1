@@ -2,6 +2,11 @@
 #  BlackWhole Magazine - Safe Push Script
 #  Run this from C:\Users\PCZONE.GE\Desktop\BlackWhole
 #  Usage: .\push.ps1
+#
+#  IMPORTANT: This script NEVER pushes templates/*.json
+#  Template layout changes (custom liquid, section order,
+#  visibility) are done in the Shopify builder only.
+#  Code changes (CSS, JS, Liquid sections) are pushed here.
 # ============================================================
 
 $STORE = "eueerb-am.myshopify.com"
@@ -12,35 +17,17 @@ Write-Host "================================================" -ForegroundColor C
 Write-Host "  BlackWhole - Safe Push" -ForegroundColor Cyan
 Write-Host "================================================" -ForegroundColor Cyan
 Write-Host ""
-
-# Step 1: Pull latest templates from Shopify first
-# This preserves any custom liquid sections added in the builder
-Write-Host "[ PRE ] Pulling latest templates from Shopify..." -ForegroundColor Yellow
-Write-Host "        (preserves custom liquid sections added in builder)" -ForegroundColor DarkGray
+Write-Host "  NOTE: templates/*.json are never pushed here." -ForegroundColor DarkGray
+Write-Host "  Builder layout changes stay safe." -ForegroundColor DarkGray
 Write-Host ""
 
-shopify theme pull --store $STORE --only "templates/"
-
-if ($LASTEXITCODE -ne 0) {
-    Write-Host ""
-    Write-Host "Template pull failed. Check Shopify connection." -ForegroundColor Red
-    $continue = Read-Host "Continue anyway? (y/n)"
-    if ($continue -ne "y") {
-        Write-Host "Aborted." -ForegroundColor Red
-        exit
-    }
-} else {
-    Write-Host "Templates synced from Shopify. OK" -ForegroundColor Green
-}
-
-# Step 2: Commit message
-Write-Host ""
+# Step 1: Commit message
 $message = Read-Host "Describe what you changed (e.g. Fix collection card image position)"
 if ([string]::IsNullOrWhiteSpace($message)) {
     $message = "Update $TIMESTAMP"
 }
 
-# Step 3: Git backup
+# Step 2: Git backup
 Write-Host ""
 Write-Host "[ 1/2 ] Saving to GitHub..." -ForegroundColor Cyan
 
@@ -60,12 +47,14 @@ if ($LASTEXITCODE -ne 0) {
     Write-Host "GitHub backup saved. OK" -ForegroundColor Green
 }
 
-# Step 4: Push to Shopify
+# Step 3: Push to Shopify - EXCLUDING all template JSON files
 Write-Host ""
-Write-Host "[ 2/2 ] Pushing to Shopify..." -ForegroundColor Cyan
+Write-Host "[ 2/2 ] Pushing to Shopify (excluding templates)..." -ForegroundColor Cyan
 Write-Host ""
 
-shopify theme push --store $STORE
+shopify theme push --store $STORE `
+  --ignore "templates/" `
+  --ignore "locales/"
 
 if ($LASTEXITCODE -ne 0) {
     Write-Host ""
