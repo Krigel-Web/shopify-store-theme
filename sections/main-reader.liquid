@@ -1,0 +1,113 @@
+{% liquid
+  assign comic_product = page.metafields.custom.comic_product.value
+  assign has_vault = false
+  assign is_free_issue = false
+  assign can_read = false
+
+  if customer and customer.tags contains 'vault_unlocked'
+    assign has_vault = true
+  endif
+
+  if comic_product and comic_product.handle == 'astroflush-1'
+    assign is_free_issue = true
+  endif
+
+  if is_free_issue or has_vault
+    assign can_read = true
+  endif
+
+  assign reader_format = 'standard'
+  assign reader_page_count = 0
+  assign pages_1 = blank
+  assign pages_2 = blank
+
+  if comic_product
+    assign reader_format = comic_product.metafields.custom.reader_format.value | default: 'standard'
+    assign reader_page_count = comic_product.metafields.custom.reader_page_count.value | default: 0
+    assign pages_1 = comic_product.metafields.custom.reader_pages_1.value
+    assign pages_2 = comic_product.metafields.custom.reader_pages_2.value
+  endif
+%}
+
+{{ 'reader.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'reader.js' | asset_url }}" defer></script>
+
+<section
+  class="reader-shell{% if can_read %} is-readable{% else %} is-locked{% endif %}{% if comic_product %} reader-shell--{{ reader_format | handleize }}{% endif %}"
+  {% if comic_product %}
+    data-reader-shell
+    data-reader-handle="{{ comic_product.handle }}"
+    data-reader-format="{{ reader_format | escape }}"
+    data-reader-page-count="{{ reader_page_count }}"
+  {% endif %}
+>
+  {% if comic_product == blank %}
+    <div class="reader-empty">
+      <h1>Reader not configured</h1>
+      <p>No comic product is connected to this reader page yet.</p>
+    </div>
+
+  {% elsif can_read == false %}
+    <div class="reader-locked">
+      <h1>{{ comic_product.title }}</h1>
+      <p>This comic is locked.</p>
+
+      <div class="reader-locked__actions">
+        <a href="/products/unlock-the-vault" class="my-vault__button my-vault__button--primary">
+          Unlock the Vault
+        </a>
+
+        {% unless customer %}
+          <a href="{{ routes.account_login_url }}" class="my-vault__button">
+            Log in
+          </a>
+        {% endunless %}
+      </div>
+    </div>
+
+  {% else %}
+    <script id="ReaderManifest-{{ section.id }}" type="application/json">
+      {
+        "productId": {{ comic_product.id | json }},
+        "handle": {{ comic_product.handle | json }},
+        "title": {{ comic_product.title | json }},
+        "format": {{ reader_format | json }},
+        "pageCount": {{ reader_page_count | json }},
+        "pages": [
+          {% assign has_output = false %}
+
+{% for file in pages_1 %}
+  {% if has_output %},{% endif %}
+  {{ file | image_url: width: 2000 | json }}
+  {% assign has_output = true %}
+{% endfor %}
+
+{% for file in pages_2 %}
+  {% if has_output %},{% endif %}
+  {{ file | image_url: width: 2000 | json }}
+  {% assign has_output = true %}
+{% endfor %}
+        ]
+      }
+    </script>
+
+    <div
+      id="ReaderApp-{{ section.id }}"
+      class="reader-app"
+      data-reader-app
+      data-manifest-id="ReaderManifest-{{ section.id }}"
+      data-reader-title="{{ comic_product.title | escape }}"
+      data-reader-format="{{ reader_format | escape }}"
+      data-reader-page-count="{{ reader_page_count }}"
+    >
+      <div class="reader-loading">Loading reader…</div>
+    </div>
+  {% endif %}
+</section>
+
+{% schema %}
+{
+  "name": "Main reader",
+  "settings": []
+}
+{% endschema %}

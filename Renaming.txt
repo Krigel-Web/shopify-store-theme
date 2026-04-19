@@ -1,0 +1,33 @@
+Do this exactly:
+
+Put all images inside the folder:
+Astrouflash
+
+Open that folder in File Explorer.
+
+Click the address bar, type:
+powershell
+and press Enter.
+
+Paste this command and press Enter:
+
+$i=1; Get-ChildItem -File | Sort-Object Name | ForEach-Object { Rename-Item $_ -NewName ("astroflush-{0:D3}{1}" -f $i, $_.Extension); $i++ }
+
+Result will become:
+
+astroflush-001.jpg
+
+astroflush-002.jpg
+
+astroflush-003.jpg
+
+If you want to rename only JPG files, use this instead:
+
+$i=1; Get-ChildItem -File *.jpg | Sort-Object Name | ForEach-Object { Rename-Item $_ -NewName ("astroflush-{0:D3}.jpg" -f $i); $i++ }
+
+If the files are PNG:
+
+$i=1; Get-ChildItem -File *.png | Sort-Object Name | ForEach-Object { Rename-Item $_ -NewName ("astroflush-{0:D3}.png" -f $i); $i++ }
+
+Important:
+Before running it, make sure the files are already in the correct order.

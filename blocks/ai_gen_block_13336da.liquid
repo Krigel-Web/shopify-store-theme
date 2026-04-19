@@ -1,0 +1,408 @@
+{% doc %}
+  @prompt
+    Build a 'Featured Collection' section with a 'Hybrid Shelf' layout mechanic.
+    
+    1. Desktop Behavior (The Grid):
+    
+    Layout: Grid view.
+    
+    Columns: Set to 3 columns per row.
+    
+    Interaction: Static grid (no sliding).
+    
+    2. Mobile Behavior (The Shelf):
+    
+    Layout: Horizontal Slider / Carousel.
+    
+    Columns: Set to 1 column visible, with the second card 'peeking' (partial visibility) to encourage swiping.
+    
+    Interaction: Enable 'Swipe on Mobile'.
+    
+    3. Card Styling (The Ghost Look):
+    
+    Card Background: Transparent (None).
+    
+    Borders: None.
+    
+    Image Ratio: Portrait / Adapt to Image (do not crop my comic covers).
+    
+    Text: Position Title and Price below the image. Align Left. Color: White."
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-featured-collection-{{ ai_gen_id }} {
+    display: block;
+    width: 100%;
+    padding: {{ block.settings.section_padding_top }}px 0 {{ block.settings.section_padding_bottom }}px;
+    background-color: {{ block.settings.background_color }};
+  }
+
+  .ai-featured-collection__container-{{ ai_gen_id }} {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+
+  .ai-featured-collection__header-{{ ai_gen_id }} {
+    margin-bottom: {{ block.settings.header_spacing }}px;
+    text-align: {{ block.settings.heading_alignment }};
+  }
+
+  .ai-featured-collection__heading-{{ ai_gen_id }} {
+    color: {{ block.settings.heading_color }};
+    margin: 0;
+    font-size: {{ block.settings.heading_size }}px;
+  }
+
+  .ai-featured-collection__grid-{{ ai_gen_id }} {
+    display: grid;
+    grid-template-columns: repeat({{ block.settings.columns_desktop }}, 1fr);
+    gap: {{ block.settings.grid_gap }}px;
+  }
+
+  .ai-featured-collection__card-{{ ai_gen_id }} {
+    background: transparent;
+    border: none;
+    text-decoration: none;
+    display: block;
+  }
+
+  .ai-featured-collection__image-wrapper-{{ ai_gen_id }} {
+    position: relative;
+    width: 100%;
+    margin-bottom: 12px;
+    overflow: hidden;
+  }
+
+  .ai-featured-collection__image-{{ ai_gen_id }} {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  .ai-featured-collection__info-{{ ai_gen_id }} {
+    text-align: left;
+  }
+
+  .ai-featured-collection__title-{{ ai_gen_id }} {
+    color: {{ block.settings.text_color }};
+    font-size: {{ block.settings.title_size }}px;
+    margin: 0 0 8px;
+    font-weight: 500;
+  }
+
+  .ai-featured-collection__price-{{ ai_gen_id }} {
+    color: {{ block.settings.text_color }};
+    font-size: {{ block.settings.price_size }}px;
+    margin: 0;
+  }
+
+  .ai-featured-collection__empty-{{ ai_gen_id }} {
+    text-align: center;
+    padding: 60px 20px;
+    color: {{ block.settings.text_color }};
+  }
+
+  @media screen and (max-width: 749px) {
+    .ai-featured-collection__grid-{{ ai_gen_id }} {
+      display: flex;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+      gap: {{ block.settings.mobile_gap }}px;
+      padding-bottom: 10px;
+    }
+
+    .ai-featured-collection__card-{{ ai_gen_id }} {
+      flex: 0 0 calc(100% - 60px);
+      scroll-snap-align: start;
+    }
+  }
+{% endstyle %}
+
+<featured-collection-{{ ai_gen_id }}
+  class="ai-featured-collection-{{ ai_gen_id }}"
+  {{ block.shopify_attributes }}
+>
+  <div class="ai-featured-collection__container-{{ ai_gen_id }}">
+    {% if block.settings.heading != blank %}
+      <div class="ai-featured-collection__header-{{ ai_gen_id }}">
+        <h2 class="ai-featured-collection__heading-{{ ai_gen_id }}">{{ block.settings.heading }}</h2>
+      </div>
+    {% endif %}
+
+    {% if block.settings.collection != blank and block.settings.collection.products.size > 0 %}
+      <div class="ai-featured-collection__grid-{{ ai_gen_id }}">
+        {% for product in block.settings.collection.products limit: block.settings.products_to_show %}
+          <a
+            href="{{ product.url }}"
+            class="ai-featured-collection__card-{{ ai_gen_id }}"
+          >
+            <div class="ai-featured-collection__image-wrapper-{{ ai_gen_id }}">
+              {% if product.featured_image %}
+                <img
+                  src="{{ product.featured_image | image_url: width: 800 }}"
+                  alt="{{ product.featured_image.alt | escape }}"
+                  class="ai-featured-collection__image-{{ ai_gen_id }}"
+                  loading="lazy"
+                  width="{{ product.featured_image.width }}"
+                  height="{{ product.featured_image.height }}"
+                >
+              {% else %}
+                <div class="ai-featured-collection__image-placeholder-{{ ai_gen_id }}">
+                  {{ 'product-1' | placeholder_svg_tag }}
+                </div>
+              {% endif %}
+            </div>
+            <div class="ai-featured-collection__info-{{ ai_gen_id }}">
+              <h3 class="ai-featured-collection__title-{{ ai_gen_id }}">{{ product.title }}</h3>
+              <p class="ai-featured-collection__price-{{ ai_gen_id }}">{{ product.price | money }}</p>
+            </div>
+          </a>
+        {% endfor %}
+      </div>
+    {% else %}
+      <div class="ai-featured-collection__empty-{{ ai_gen_id }}">
+        <p>Select a collection to display products</p>
+      </div>
+    {% endif %}
+  </div>
+</featured-collection-{{ ai_gen_id }}>
+
+<script>
+  (function() {
+    class FeaturedCollection{{ ai_gen_id }} extends HTMLElement {
+      constructor() {
+        super();
+      }
+
+      connectedCallback() {
+        this.setupMobileScroll();
+      }
+
+      setupMobileScroll() {
+        const grid = this.querySelector('.ai-featured-collection__grid-{{ ai_gen_id }}');
+        if (!grid) return;
+
+        let isDown = false;
+        let startX;
+        let scrollLeft;
+
+        grid.addEventListener('mousedown', (e) => {
+          if (window.innerWidth > 749) return;
+          isDown = true;
+          startX = e.pageX - grid.offsetLeft;
+          scrollLeft = grid.scrollLeft;
+        });
+
+        grid.addEventListener('mouseleave', () => {
+          isDown = false;
+        });
+
+        grid.addEventListener('mouseup', () => {
+          isDown = false;
+        });
+
+        grid.addEventListener('mousemove', (e) => {
+          if (!isDown) return;
+          if (window.innerWidth > 749) return;
+          e.preventDefault();
+          const x = e.pageX - grid.offsetLeft;
+          const walk = (x - startX) * 2;
+          grid.scrollLeft = scrollLeft - walk;
+        });
+      }
+    }
+
+    customElements.define('featured-collection-{{ ai_gen_id }}', FeaturedCollection{{ ai_gen_id }});
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Featured collection",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Collection"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Collection"
+    },
+    {
+      "type": "range",
+      "id": "products_to_show",
+      "label": "Products to show",
+      "min": 3,
+      "max": 12,
+      "step": 1,
+      "default": 6
+    },
+    {
+      "type": "header",
+      "content": "Heading"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Featured Collection"
+    },
+    {
+      "type": "select",
+      "id": "heading_alignment",
+      "label": "Alignment",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "range",
+      "id": "heading_size",
+      "label": "Heading size",
+      "min": 16,
+      "max": 72,
+      "step": 2,
+      "unit": "px",
+      "default": 32
+    },
+    {
+      "type": "range",
+      "id": "header_spacing",
+      "label": "Spacing below heading",
+      "min": 10,
+      "max": 60,
+      "step": 5,
+      "unit": "px",
+      "default": 30
+    },
+    {
+      "type": "header",
+      "content": "Desktop layout"
+    },
+    {
+      "type": "range",
+      "id": "columns_desktop",
+      "label": "Columns",
+      "min": 2,
+      "max": 5,
+      "step": 1,
+      "default": 3
+    },
+    {
+      "type": "range",
+      "id": "grid_gap",
+      "label": "Gap between products",
+      "min": 10,
+      "max": 60,
+      "step": 5,
+      "unit": "px",
+      "default": 30
+    },
+    {
+      "type": "header",
+      "content": "Mobile layout"
+    },
+    {
+      "type": "range",
+      "id": "mobile_gap",
+      "label": "Gap between products",
+      "min": 10,
+      "max": 40,
+      "step": 5,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "header",
+      "content": "Product card"
+    },
+    {
+      "type": "range",
+      "id": "title_size",
+      "label": "Title size",
+      "min": 12,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "price_size",
+      "label": "Price size",
+      "min": 12,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "default": 14
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text",
+      "default": "#ffffff"
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "section_padding_top",
+      "label": "Top padding",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "section_padding_bottom",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "default": 40
+    }
+  ],
+  "presets": [
+    {
+      "name": "Featured collection"
+    }
+  ]
+}
+{% endschema %}

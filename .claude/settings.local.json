@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(extract-text \"BlackWhole Magazine Developer brief \\(1\\) \\(1\\).docx\")",
+      "Bash(pandoc \"BlackWhole Magazine Developer brief \\(1\\) \\(1\\).docx\" -t plain)",
+      "Bash(python3)"
+    ]
+  }
+}
