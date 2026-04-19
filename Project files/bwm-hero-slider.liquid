@@ -1,0 +1,148 @@
+<style>
+  .bwm-hero {
+    width: 60vw;
+    margin: 0 auto;
+    border-radius: 16px;
+    overflow: hidden;
+    position: relative;
+    background: #111;
+  }
+  .bwm-hero__slide { display: none; position: relative; width: 100%; }
+  .bwm-hero__slide.is-active { display: block; }
+  .bwm-hero__img {
+    display: block; width: 100%;
+    height: clamp(300px, 42vw, 620px);
+    object-fit: cover; object-position: center;
+  }
+  .bwm-hero__overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.15) 55%, transparent 100%);
+  }
+  .bwm-hero__content {
+    position: absolute; bottom: 48px; left: 50%;
+    transform: translateX(-50%);
+    text-align: center; color: #fff; width: 80%;
+  }
+  .bwm-hero__heading {
+    font-size: clamp(1.4rem, 2.8vw, 2.4rem);
+    font-weight: 700; letter-spacing: -0.02em; margin: 0 0 8px;
+  }
+  .bwm-hero__text {
+    font-size: clamp(0.8rem, 1.1vw, 1rem);
+    margin: 0 0 20px; opacity: 0.8;
+  }
+  .bwm-hero__btn {
+    display: inline-block; padding: 10px 24px;
+    border: 1px solid rgba(255,255,255,0.85);
+    color: #fff; text-decoration: none;
+    font-size: 13px; font-weight: 500;
+    transition: background 0.2s, color 0.2s;
+  }
+  .bwm-hero__btn:hover { background: #fff; color: #000; }
+  .bwm-hero__btn--primary { background: #fff; color: #000; }
+  .bwm-hero__btn--primary:hover { background: #e0e0e0; color: #000; }
+  .bwm-hero__dots {
+    position: absolute; bottom: 14px; left: 50%;
+    transform: translateX(-50%);
+    display: flex; gap: 7px; z-index: 10;
+  }
+  .bwm-hero__dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: rgba(255,255,255,0.35); border: none;
+    cursor: pointer; padding: 0;
+    transition: background 0.2s, transform 0.2s;
+  }
+  .bwm-hero__dot.is-active { background: #fff; transform: scale(1.4); }
+  .bwm-hero__arrow {
+    position: absolute; top: 50%; transform: translateY(-50%);
+    background: rgba(0,0,0,0.35); border: 1px solid rgba(255,255,255,0.18);
+    color: #fff; width: 42px; height: 42px; border-radius: 50%;
+    cursor: pointer; font-size: 16px;
+    display: flex; align-items: center; justify-content: center;
+    transition: background 0.2s; z-index: 10;
+  }
+  .bwm-hero__arrow:hover { background: rgba(0,0,0,0.7); }
+  .bwm-hero__arrow--prev { left: 16px; }
+  .bwm-hero__arrow--next { right: 16px; }
+  @media (max-width: 1199px) {
+    .bwm-hero { width: 90vw; }
+  }
+  @media (max-width: 749px) {
+    .bwm-hero { width: 100%; border-radius: 0; }
+    .bwm-hero__img { height: 62vw; }
+    .bwm-hero__content { bottom: 32px; }
+  }
+</style>
+
+<div class="bwm-hero" id="bwm-hero">
+  <div class="bwm-hero__slides">
+
+    <div class="bwm-hero__slide is-active">
+      <img src="{{ 'MurderOnPoint_story_HeroImage_laptop_3.png' | file_url }}" alt="Murder On Point" class="bwm-hero__img" loading="eager">
+      <div class="bwm-hero__overlay"></div>
+      <div class="bwm-hero__content">
+        <a href="/collections/all" class="bwm-hero__btn">Explore Now</a>
+      </div>
+    </div>
+
+    <div class="bwm-hero__slide">
+      <img src="{{ 'AstroFlush_First_issue_ad_HeroImage_laptop_4.png' | file_url }}" alt="AstroFlush" class="bwm-hero__img" loading="lazy">
+      <div class="bwm-hero__overlay"></div>
+      <div class="bwm-hero__content">
+        <h2 class="bwm-hero__heading">ASTROFLUSH</h2>
+        <p class="bwm-hero__text">The Signal is Here</p>
+        <a href="/collections/all" class="bwm-hero__btn bwm-hero__btn--primary">Read Issue #1 Free</a>
+      </div>
+    </div>
+
+    <div class="bwm-hero__slide">
+      <img src="{{ 'MurderOnPoint_story_HeroImage_laptop_2.png' | file_url }}" alt="Murder On Point" class="bwm-hero__img" loading="lazy">
+      <div class="bwm-hero__overlay"></div>
+      <div class="bwm-hero__content">
+        <h2 class="bwm-hero__heading">MURDER ON POINT</h2>
+        <p class="bwm-hero__text">Cinematic Noir Mystery</p>
+        <a href="/collections/all" class="bwm-hero__btn">Enter the Mystery</a>
+      </div>
+    </div>
+
+    <div class="bwm-hero__slide">
+      <img src="{{ 'AstroFlush_seiries_HeroImage_laptop_1.png' | file_url }}" alt="AstroFlush Series" class="bwm-hero__img" loading="lazy">
+      <div class="bwm-hero__overlay"></div>
+      <div class="bwm-hero__content">
+        <h2 class="bwm-hero__heading">ASTROFLUSH</h2>
+        <p class="bwm-hero__text">A Tale of Cosmic Intrigue</p>
+        <a href="/collections/all" class="bwm-hero__btn bwm-hero__btn--primary">Discover the Story</a>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="bwm-hero__dots">
+    <button class="bwm-hero__dot is-active" data-idx="0"></button>
+    <button class="bwm-hero__dot" data-idx="1"></button>
+    <button class="bwm-hero__dot" data-idx="2"></button>
+    <button class="bwm-hero__dot" data-idx="3"></button>
+  </div>
+  <button class="bwm-hero__arrow bwm-hero__arrow--prev" aria-label="Previous">&#8592;</button>
+  <button class="bwm-hero__arrow bwm-hero__arrow--next" aria-label="Next">&#8594;</button>
+</div>
+
+<script>
+(function() {
+  const hero = document.getElementById('bwm-hero');
+  if (!hero) return;
+  const slides = hero.querySelectorAll('.bwm-hero__slide');
+  const dots = hero.querySelectorAll('.bwm-hero__dot');
+  let current = 0;
+  function goTo(n) {
+    slides[current].classList.remove('is-active');
+    dots[current].classList.remove('is-active');
+    current = (n + slides.length) % slides.length;
+    slides[current].classList.add('is-active');
+    dots[current].classList.add('is-active');
+  }
+  hero.querySelector('.bwm-hero__arrow--prev').addEventListener('click', () => goTo(current - 1));
+  hero.querySelector('.bwm-hero__arrow--next').addEventListener('click', () => goTo(current + 1));
+  dots.forEach(d => d.addEventListener('click', () => goTo(Number(d.dataset.idx))));
+})();
+</script>

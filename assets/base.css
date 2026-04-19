@@ -5014,3 +5014,9 @@ product-recommendations:has([data-has-recommendations='false']) {
     max-width: 100%;
   }
 }
+
+/* ── Collection page — comic card image top position ── */
+.template-collection .product-card img,
+.catalog-card img {
+  object-position: top center;
+}

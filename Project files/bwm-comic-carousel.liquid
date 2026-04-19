@@ -1,0 +1,149 @@
+<style>
+  .bwm-carousel {
+    width: 60vw;
+    margin: 0 auto;
+    padding: 28px 0;
+  }
+  .bwm-carousel__header {
+    display: flex; align-items: center;
+    justify-content: space-between;
+    margin-bottom: 18px; padding: 0 2px;
+  }
+  .bwm-carousel__title {
+    font-size: clamp(1rem, 1.8vw, 1.2rem);
+    font-weight: 600; color: #fff; margin: 0;
+  }
+  .bwm-carousel__track {
+    display: flex; gap: 16px;
+    overflow-x: auto; scroll-snap-type: x mandatory;
+    scrollbar-width: none; padding-bottom: 4px;
+  }
+  .bwm-carousel__track::-webkit-scrollbar { display: none; }
+  .bwm-carousel__card {
+    flex: 0 0 calc(25% - 12px);
+    scroll-snap-align: start;
+    min-width: 0;
+  }
+  .bwm-carousel__img-wrap {
+    aspect-ratio: 2 / 3;
+    overflow: hidden; border-radius: 8px;
+    background: #1a1a1a; margin-bottom: 10px;
+  }
+  .bwm-carousel__img {
+    width: 100%; height: 100%;
+    object-fit: cover; object-position: top center;
+    display: block;
+    transition: transform 0.3s ease;
+  }
+  .bwm-carousel__card:hover .bwm-carousel__img { transform: scale(1.03); }
+  .bwm-carousel__card-title {
+    font-size: 13px; font-weight: 600; color: #fff;
+    margin: 0 0 4px;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .bwm-carousel__card-desc {
+    font-size: 12px; color: rgba(255,255,255,0.55);
+    margin: 0; line-height: 1.5;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .bwm-carousel__arrows {
+    display: flex; gap: 8px;
+    margin-top: 18px; justify-content: flex-end;
+  }
+  .bwm-carousel__arrow {
+    width: 36px; height: 36px; border-radius: 50%;
+    border: 1px solid rgba(255,255,255,0.18);
+    background: rgba(255,255,255,0.04);
+    color: #fff; cursor: pointer; font-size: 14px;
+    display: flex; align-items: center; justify-content: center;
+    transition: background 0.2s;
+  }
+  .bwm-carousel__arrow:hover { background: rgba(255,255,255,0.12); }
+  @media (max-width: 1199px) {
+    .bwm-carousel { width: 90vw; }
+    .bwm-carousel__card { flex: 0 0 calc(33% - 11px); }
+  }
+  @media (max-width: 749px) {
+    .bwm-carousel { width: 100%; padding-inline: 16px; box-sizing: border-box; }
+    .bwm-carousel__card { flex: 0 0 58vw; }
+  }
+</style>
+
+<div class="bwm-carousel">
+  <div class="bwm-carousel__header">
+    <h2 class="bwm-carousel__title">Read Comic book, Novellas and magazines</h2>
+  </div>
+  <div class="bwm-carousel__track" id="bwm-carousel-track">
+
+    <div class="bwm-carousel__card">
+      <div class="bwm-carousel__img-wrap">
+        <img src="{{ 'image.png' | file_url }}" alt="AstroFlush #1" class="bwm-carousel__img" loading="lazy">
+      </div>
+      <p class="bwm-carousel__card-title">AstroFlush #1</p>
+      <p class="bwm-carousel__card-desc">cinematic odyssey that blends the lawless grit of a Western with the cold dread of deep-space Sci-Fi</p>
+    </div>
+
+    <div class="bwm-carousel__card">
+      <div class="bwm-carousel__img-wrap">
+        <img src="{{ 'Book_3_cover_d3a3804d-939e-46f1-bf4c-037a6c51f4c9.png' | file_url }}" alt="AstroFlush #2" class="bwm-carousel__img" loading="lazy">
+      </div>
+      <p class="bwm-carousel__card-title">AstroFlush #2</p>
+      <p class="bwm-carousel__card-desc">The journey into the wastes deepens. The crew is stuck without fuel on a remote planet</p>
+    </div>
+
+    <div class="bwm-carousel__card">
+      <div class="bwm-carousel__img-wrap">
+        <img src="{{ 'For_real_Book_3_cover_9477159e-f5cc-4225-b93c-d8d4a2819dc1.png' | file_url }}" alt="AstroFlush #3" class="bwm-carousel__img" loading="lazy">
+      </div>
+      <p class="bwm-carousel__card-title">AstroFlush #3</p>
+      <p class="bwm-carousel__card-desc">A job to steal a book from a library goes south</p>
+    </div>
+
+    <div class="bwm-carousel__card">
+      <div class="bwm-carousel__img-wrap">
+        <img src="{{ 'MurderOnPoint.png' | file_url }}" alt="Murder On Point" class="bwm-carousel__img" loading="lazy">
+      </div>
+      <p class="bwm-carousel__card-title">Murder On Point</p>
+      <p class="bwm-carousel__card-desc">A cold, calculated detective noir that strips the genre down to its barest, most high-contrast elements</p>
+    </div>
+
+    <div class="bwm-carousel__card">
+      <div class="bwm-carousel__img-wrap">
+        <img src="{{ 'part_1_BlackWhole_Magazine_Vol_1_f0fbe1a1-d80f-4b9b-a463-53d2597811c9.png' | file_url }}" alt="BlackWhole Magazine Vol 1" class="bwm-carousel__img" loading="lazy">
+      </div>
+      <p class="bwm-carousel__card-title">BlackWhole Magazine Vol 1</p>
+      <p class="bwm-carousel__card-desc">Three short stories featuring art, poetry, and more</p>
+    </div>
+
+    <div class="bwm-carousel__card">
+      <div class="bwm-carousel__img-wrap">
+        <img src="{{ 'DinerAtomica_5fb2f334-35ea-4173-b8cb-12866bcc4666.png' | file_url }}" alt="Diner Atomica" class="bwm-carousel__img" loading="lazy">
+      </div>
+      <p class="bwm-carousel__card-title">Diner Atomica</p>
+      <p class="bwm-carousel__card-desc">A unique Cold War era story set in an unlikely location</p>
+    </div>
+
+  </div>
+  <div class="bwm-carousel__arrows">
+    <button class="bwm-carousel__arrow" id="bwm-prev" aria-label="Previous">&#8592;</button>
+    <button class="bwm-carousel__arrow" id="bwm-next" aria-label="Next">&#8594;</button>
+  </div>
+</div>
+
+<script>
+(function() {
+  const track = document.getElementById('bwm-carousel-track');
+  if (!track) return;
+  const card = () => track.querySelector('.bwm-carousel__card');
+  const scrollAmount = () => (card()?.offsetWidth || 200) + 16;
+  document.getElementById('bwm-prev').addEventListener('click', () => {
+    track.scrollBy({ left: -scrollAmount() * 2, behavior: 'smooth' });
+  });
+  document.getElementById('bwm-next').addEventListener('click', () => {
+    track.scrollBy({ left: scrollAmount() * 2, behavior: 'smooth' });
+  });
+})();
+</script>
