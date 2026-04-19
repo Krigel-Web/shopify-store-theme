@@ -1357,7 +1357,7 @@
         "columns": 4,
         "mobile_columns": "1",
         "section_width": "page-width",
-        "columns_gap": 6,
+        "columns_gap": 16,
         "color_scheme": "",
         "icons_style": "arrow",
         "icons_shape": "none",

@@ -4992,3 +4992,25 @@ product-recommendations:has([data-has-recommendations='false']) {
 }
 
 
+
+/* ── Homepage carousel — inset 60vw + image top position ── */
+#shopify-section-carousel_EcEJRP {
+  max-width: 60vw;
+  margin-inline: auto;
+}
+
+#shopify-section-carousel_EcEJRP img {
+  object-position: top center;
+}
+
+@media screen and (max-width: 1199px) {
+  #shopify-section-carousel_EcEJRP {
+    max-width: 90vw;
+  }
+}
+
+@media screen and (max-width: 749px) {
+  #shopify-section-carousel_EcEJRP {
+    max-width: 100%;
+  }
+}
