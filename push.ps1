@@ -13,13 +13,34 @@ Write-Host "  BlackWhole - Safe Push" -ForegroundColor Cyan
 Write-Host "================================================" -ForegroundColor Cyan
 Write-Host ""
 
-# Step 1: Commit message
-$message = Read-Host "Describe what you changed (e.g. Fix vault CTA z-index)"
+# Step 1: Pull latest templates from Shopify first
+# This preserves any custom liquid sections added in the builder
+Write-Host "[ PRE ] Pulling latest templates from Shopify..." -ForegroundColor Yellow
+Write-Host "        (preserves custom liquid sections added in builder)" -ForegroundColor DarkGray
+Write-Host ""
+
+shopify theme pull --store $STORE --only "templates/"
+
+if ($LASTEXITCODE -ne 0) {
+    Write-Host ""
+    Write-Host "Template pull failed. Check Shopify connection." -ForegroundColor Red
+    $continue = Read-Host "Continue anyway? (y/n)"
+    if ($continue -ne "y") {
+        Write-Host "Aborted." -ForegroundColor Red
+        exit
+    }
+} else {
+    Write-Host "Templates synced from Shopify. OK" -ForegroundColor Green
+}
+
+# Step 2: Commit message
+Write-Host ""
+$message = Read-Host "Describe what you changed (e.g. Fix collection card image position)"
 if ([string]::IsNullOrWhiteSpace($message)) {
     $message = "Update $TIMESTAMP"
 }
 
-# Step 2: Git backup
+# Step 3: Git backup
 Write-Host ""
 Write-Host "[ 1/2 ] Saving to GitHub..." -ForegroundColor Cyan
 
@@ -39,7 +60,7 @@ if ($LASTEXITCODE -ne 0) {
     Write-Host "GitHub backup saved. OK" -ForegroundColor Green
 }
 
-# Step 3: Push to Shopify
+# Step 4: Push to Shopify
 Write-Host ""
 Write-Host "[ 2/2 ] Pushing to Shopify..." -ForegroundColor Cyan
 Write-Host ""
@@ -57,7 +78,8 @@ if ($LASTEXITCODE -ne 0) {
 Write-Host ""
 Write-Host "[ DONE ] Testing reminder:" -ForegroundColor Cyan
 Write-Host ""
-Write-Host "  [ ] Open your live store and test the change" -ForegroundColor White
+Write-Host "  [ ] Check homepage custom liquid sections still visible" -ForegroundColor White
+Write-Host "  [ ] Check the specific change you made" -ForegroundColor White
 Write-Host "  [ ] Check on mobile too" -ForegroundColor White
 Write-Host ""
 Write-Host "================================================" -ForegroundColor Green
