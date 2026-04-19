@@ -517,10 +517,10 @@
       "name": "t:names.slideshow_full_frame",
       "settings": {
         "display_mode": "full_frame",
-        "section_width": "full-width",
+        "section_width": "page-width",
         "full_frame_on_mobile": false,
         "slideshow_gap": 12,
-        "corner_radius": 0,
+        "corner_radius": 16,
         "slide_height": "large",
         "content_position": "on-media",
         "color_scheme": "scheme-1",
@@ -530,7 +530,7 @@
         "autoplay": false,
         "autoplay_speed": 4,
         "padding-block-start": 0,
-        "padding-block-end": 0
+        "padding-block-end": 32
       }
     },
     "carousel_EcEJRP": {
@@ -661,7 +661,7 @@
                   "settings": {
                     "image": "shopify://shop_images/image.png",
                     "link": "",
-                    "image_ratio": "adapt",
+                    "image_ratio": "portrait",
                     "width": "fill",
                     "custom_width": 100,
                     "width_mobile": "fill",
@@ -825,7 +825,7 @@
                   "settings": {
                     "image": "shopify://shop_images/Book_3_cover_d3a3804d-939e-46f1-bf4c-037a6c51f4c9.png",
                     "link": "",
-                    "image_ratio": "adapt",
+                    "image_ratio": "portrait",
                     "width": "fill",
                     "custom_width": 100,
                     "width_mobile": "fill",
@@ -935,7 +935,7 @@
                   "settings": {
                     "image": "shopify://shop_images/For_real_Book_3_cover_9477159e-f5cc-4225-b93c-d8d4a2819dc1.png",
                     "link": "",
-                    "image_ratio": "adapt",
+                    "image_ratio": "portrait",
                     "width": "fill",
                     "custom_width": 100,
                     "width_mobile": "fill",
@@ -1045,7 +1045,7 @@
                   "settings": {
                     "image": "shopify://shop_images/MurderOnPoint.png",
                     "link": "",
-                    "image_ratio": "adapt",
+                    "image_ratio": "portrait",
                     "width": "fill",
                     "custom_width": 100,
                     "width_mobile": "fill",
@@ -1209,7 +1209,7 @@
                   "settings": {
                     "image": "shopify://shop_images/part_1_BlackWhole_Magazine_Vol_1_f0fbe1a1-d80f-4b9b-a463-53d2597811c9.png",
                     "link": "",
-                    "image_ratio": "adapt",
+                    "image_ratio": "portrait",
                     "width": "fill",
                     "custom_width": 100,
                     "width_mobile": "fill",
@@ -1292,7 +1292,7 @@
                   "settings": {
                     "image": "shopify://shop_images/DinerAtomica_5fb2f334-35ea-4173-b8cb-12866bcc4666.png",
                     "link": "",
-                    "image_ratio": "adapt",
+                    "image_ratio": "portrait",
                     "width": "fill",
                     "custom_width": 100,
                     "width_mobile": "fill",
