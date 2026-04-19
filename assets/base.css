@@ -4992,30 +4992,3 @@ product-recommendations:has([data-has-recommendations='false']) {
 }
 
 
-/* ── Homepage slideshow — inset cinematic layout ── */
-#shopify-section-slideshow_NbJBq6 {
-  padding-inline: 20vw;
-  box-sizing: border-box;
-}
-
-#shopify-section-slideshow_NbJBq6 .slideshow-section {
-  width: 100%;
-  max-width: 100% !important;
-  border-radius: 16px;
-  overflow: hidden;
-}
-
-@media screen and (max-width: 1199px) {
-  #shopify-section-slideshow_NbJBq6 {
-    padding-inline: 10vw;
-  }
-}
-
-@media screen and (max-width: 749px) {
-  #shopify-section-slideshow_NbJBq6 {
-    padding-inline: 0;
-  }
-  #shopify-section-slideshow_NbJBq6 .slideshow-section {
-    border-radius: 0;
-  }
-}
