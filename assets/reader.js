@@ -468,6 +468,9 @@
 
     app.innerHTML = '';
 
+    const vaultCtaId = app.dataset.vaultCtaId;
+    const vaultCta = vaultCtaId ? document.getElementById(vaultCtaId) : null;
+
     const desktopSpreadQuery = window.matchMedia(DESKTOP_SPREAD_MEDIA);
     let desktopViewMode = DESKTOP_VIEW_MODE_SPREAD;
 
@@ -531,6 +534,14 @@
     let activeDesktopPageIndex = 0;
     let wasDesktop = desktopSpreadQuery.matches;
     let desktopZoom = 1;
+
+    const updateVaultCta = (pageIndex) => {
+      if (!vaultCta) return;
+      const isLastPage = desktopSpreadQuery.matches
+        ? activeDesktopPageIndex >= pageUrls.length - 1
+        : pageIndex >= pageUrls.length - 1;
+      vaultCta.hidden = !isLastPage;
+    };
 
     const dismissResumePrompt = () => {
       isResumeChoicePending = false;
@@ -765,6 +776,8 @@
       if (save && !isRestoring && !isResumeChoicePending) {
         saveProgress(manifest.handle, pageIndex, progress);
       }
+
+      updateVaultCta(pageIndex);
     };
 
     const showDesktopSpread = async (

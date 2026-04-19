@@ -99,9 +99,38 @@
       data-reader-title="{{ comic_product.title | escape }}"
       data-reader-format="{{ reader_format | escape }}"
       data-reader-page-count="{{ reader_page_count }}"
+      data-free-issue="{{ is_free_issue }}"
+      {% if is_free_issue and has_vault == false %}data-vault-cta-id="ReaderVaultCta-{{ section.id }}"{% endif %}
     >
       <div class="reader-loading">Loading reader…</div>
     </div>
+
+    {% if is_free_issue and has_vault == false %}
+      <div
+        class="reader-vault-cta"
+        id="ReaderVaultCta-{{ section.id }}"
+        hidden
+        aria-live="polite"
+      >
+        <div class="reader-vault-cta__inner">
+          <div class="reader-vault-cta__text">
+            <p class="reader-vault-cta__label">End of free issue</p>
+            <p class="reader-vault-cta__heading">Unlock the full vault</p>
+            <p class="reader-vault-cta__sub">One-time access. Every issue. $3.</p>
+          </div>
+          <div class="reader-vault-cta__actions">
+            <a href="/products/unlock-the-vault" class="reader-vault-cta__button">
+              Unlock for $3
+            </a>
+            {% unless customer %}
+              <a href="{{ routes.account_login_url }}" class="reader-vault-cta__login">
+                Already unlocked? Log in
+              </a>
+            {% endunless %}
+          </div>
+        </div>
+      </div>
+    {% endif %}
   {% endif %}
 </section>
 
